@@ -1,2 +1,2 @@
 # BanglaASRTransformer
-Transformer based bangla speech recognition
+Transformer based Bangla Speech Recognition
