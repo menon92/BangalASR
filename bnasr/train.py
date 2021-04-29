@@ -1,6 +1,6 @@
+'''Training transformer netwrok on bangla speech data 
 '''
-'''
-
+import os
 import tensorflow as tf
 from tensorflow import keras
 
@@ -8,7 +8,7 @@ from . model import Transformer
 from . import utils
 from . utils import VectorizeChar
 from . import dataset
-
+from . import config as cfg
 
 class DisplayOutputs(keras.callbacks.Callback):
     def __init__(
@@ -85,27 +85,26 @@ class CustomSchedule(keras.optimizers.schedules.LearningRateSchedule):
 
 
 def train():
-    UTT_SPK_PATH = '/content/asr_bengali/utt_spk_text.tsv'
-    FLAC_AUDIO_DIR = '/content/asr_bengali/data'
-
-
+    '''Training speech model 
+    '''
+    # load data from raw audio file
     data, unique_chars = dataset.get_data(
-        utt_path=UTT_SPK_PATH,
-        flac_audio_dir=FLAC_AUDIO_DIR
+        utt_path=cfg.UTT_SPK_PATH,
+        flac_audio_dir=cfg.FLAC_AUDIO_DIR
     )
 
     max_target_len = 200  # all transcripts in out data are < 200 characters
     vectorizer = VectorizeChar(max_target_len)
     print("vocab size", len(vectorizer.get_vocabulary()))
-
-
+    
+    # split data into train validation
     data = data
-    split = int(len(data) * 0.99)
+    split = int(len(data) * cfg.TRAINING_DATA_PERCENTAGES)
     train_data = data # data[:split]
     test_data = data[split:]
-    ds = utils.create_tf_dataset(train_data, bs=400)
-    val_ds = utils.create_tf_dataset(test_data, bs=4)
-
+    
+    ds = utils.create_tf_dataset(train_data, bs=cfg.TRAIN_BATCH_SIZE)
+    val_ds = utils.create_tf_dataset(test_data, bs=cfg.VALID_BATCH_SIZE)
 
     batch = next(iter(val_ds))
 
@@ -115,9 +114,8 @@ def train():
         batch, idx_to_char, target_start_token_idx=2, target_end_token_idx=3
     )  # set the arguments as per vocabulary index for '<' and '>'
 
-    checkpoint_path = 'models/bnasr-{epoch:02d}'
     checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(
-        filepath=checkpoint_path, 
+        filepath=cfg.CHECKPOINT_PATH, 
         verbose=0, 
         save_weights_only=True,
         save_freq=5
@@ -147,10 +145,10 @@ def train():
     optimizer = keras.optimizers.Adam(learning_rate)
     model.compile(optimizer=optimizer, loss=loss_fn)
 
-
-    history = model.fit(
+    model.fit(
     	ds,
     	validation_data=val_ds,
     	callbacks=[display_cb, checkpoint_cb],
-    	epochs=5
+    	initial_epoch=cfg.INITIAL_EPOCHS
+        epochs=cfg.EPOCHS
     )
