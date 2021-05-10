@@ -149,6 +149,6 @@ def train():
     	ds,
     	validation_data=val_ds,
     	callbacks=[display_cb, checkpoint_cb],
-    	initial_epoch=cfg.INITIAL_EPOCHS
+    	initial_epoch=cfg.INITIAL_EPOCHS,
         epochs=cfg.EPOCHS
     )
