@@ -172,7 +172,9 @@ prediction: <চাঁদনী রাতের ভালোবাসার ফ�
 ```
 
 ## Referance
+- [The Illustrated Transformer](http://jalammar.github.io/illustrated-transformer/)
 - [Attention is All You Need](https://papers.nips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
+- [Transformer ASR](https://keras.io/examples/audio/transformer_asr/)
 - [Very Deep Self-Attention Networks for End-to-End Speech Recognition](https://arxiv.org/pdf/1904.13377.pdf)
 - [Speech Transformers](https://ieeexplore.ieee.org/document/8462506)
 - [Bangla Speech Dataset](https://bengali.ai/datasets/)
