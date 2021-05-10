@@ -41,7 +41,7 @@ def path_to_audio(path):
     audio_len = tf.shape(x)[0]
     
     # padding to 10 seconds
-    pad_len = 2754
+    pad_len = 2000
     paddings = tf.constant([[0, pad_len], [0, 0]])
     x = tf.pad(x, paddings, "CONSTANT")[:pad_len, :]
     return x
