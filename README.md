@@ -1,10 +1,10 @@
 # BanglaASR
-`BanglaASR` is a Transformer based Bangla `Automatic Speech Recognition (ASR)` System. I try to create a overfited model (intentionally) to build a proof of concept that, `Transformer` based model could be use for `Bangla ASR`. The intention of this project is to build up an end to end Bangla ASR pipeline so that, the people who are working on Bangla Speech Recognition, could use this as a starting point.
+`BanglaASR` is a [Transformer](https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)) based Bangla [Automatic Speech Recognition (ASR)](https://en.wikipedia.org/wiki/Speech_recognition) System. I try to create a overfited model (intentionally) to build a proof of concept that, `Transformer` based model could be use for `Bangla ASR`. The intention of this project is to build up an end to end Bangla ASR pipeline so that, the people who are working on Bangla Speech Recognition, could use this as a starting point.
 
 __Quick demo:__ [Video link](https://www.youtube.com/watch?v=s9nGrG5cF5M&list=PL4wQs28gofOGVZfH0jG0U7dMB-fzA69ph)
 
 ## Dataset
-[Bengali ASR](http://openslr.org/53/) training data set containing ~196K utterances. I did not training with all the sample instead I take a portion of sample from this dataset. You will find the samall dataset under `data/`
+[Bengali ASR training dataset](http://openslr.org/53/) containing `~196K utterances`. I did not training with all the sample instead I take a portion of sample from this dataset. You will find the samall dataset under `data/`
 
 ## Dependency
 ```bash
