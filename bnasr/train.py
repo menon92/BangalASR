@@ -157,6 +157,12 @@ def train():
     # compile the model
     model.compile(optimizer=optimizer, loss=loss_fn)
 
+    # resueme already trained model
+    if cfg.RESUME_TRAINING:
+        print(f'Model is resuming from {cfg.RESUEM_MODEL_DIR} ...')
+        latest = tf.train.latest_checkpoint(cfg.RESUEM_MODEL_DIR)
+        model.load_weights(latest)
+
     # start training the model
     model.fit(
     	ds,

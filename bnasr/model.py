@@ -41,40 +41,6 @@ class SpeechFeatureEmbedding(layers.Layer):
         return self.conv3(x)
 
 
-class TokenEmbedding(layers.Layer):
-    def __init__(self, num_vocab=1000, maxlen=100, num_hid=64):
-        super().__init__()
-        self.emb = tf.keras.layers.Embedding(num_vocab, num_hid)
-        self.pos_emb = layers.Embedding(input_dim=maxlen, output_dim=num_hid)
-
-    def call(self, x):
-        maxlen = tf.shape(x)[-1]
-        x = self.emb(x)
-        positions = tf.range(start=0, limit=maxlen, delta=1)
-        positions = self.pos_emb(positions)
-        return x + positions
-
-
-class SpeechFeatureEmbedding(layers.Layer):
-    def __init__(self, num_hid=64, maxlen=100):
-        super().__init__()
-        self.conv1 = tf.keras.layers.Conv1D(
-            num_hid, 11, strides=2, padding="same", activation="relu"
-        )
-        self.conv2 = tf.keras.layers.Conv1D(
-            num_hid, 11, strides=2, padding="same", activation="relu"
-        )
-        self.conv3 = tf.keras.layers.Conv1D(
-            num_hid, 11, strides=2, padding="same", activation="relu"
-        )
-        self.pos_emb = layers.Embedding(input_dim=maxlen, output_dim=num_hid)
-
-    def call(self, x):
-        x = self.conv1(x)
-        x = self.conv2(x)
-        return self.conv3(x)
-
-
 class TransformerEncoder(layers.Layer):
     '''Encode the speech information'''
     def __init__(self, embed_dim, num_heads, feed_forward_dim, rate=0.1):
