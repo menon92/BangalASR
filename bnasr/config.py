@@ -11,6 +11,7 @@ INITIAL_EPOCHS = 0
 TRAIN_BATCH_SIZE = 8
 VALID_BATCH_SIZE = 4
 
+# 99% training and 1% validation
 TRAINING_DATA_PERCENTAGES = 0.99
 MODEL_SAVE_DIR = 'models'
 CHECKPOINT_PATH = os.path.join(MODEL_SAVE_DIR, 'bnasr-{epoch:02d}')

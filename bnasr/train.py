@@ -11,6 +11,7 @@ from . import dataset
 from . import config as cfg
 
 class DisplayOutputs(keras.callbacks.Callback):
+    '''Display model outut after each specefied epochs'''
     def __init__(
         self, batch, idx_to_token, target_start_token_idx=27, target_end_token_idx=28
     ):
@@ -47,6 +48,7 @@ class DisplayOutputs(keras.callbacks.Callback):
 
 
 class CustomSchedule(keras.optimizers.schedules.LearningRateSchedule):
+    '''Learning reate scheduler'''
     def __init__(
         self,
         init_lr=0.00001,
@@ -105,7 +107,8 @@ def train():
     
     ds = utils.create_tf_dataset(train_data, bs=cfg.TRAIN_BATCH_SIZE)
     val_ds = utils.create_tf_dataset(test_data, bs=cfg.VALID_BATCH_SIZE)
-
+    
+    # take test sample
     batch = next(iter(val_ds))
 
     # The vocabulary to convert predicted indices into characters
@@ -114,13 +117,7 @@ def train():
         batch, idx_to_char, target_start_token_idx=2, target_end_token_idx=3
     )  # set the arguments as per vocabulary index for '<' and '>'
 
-    checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(
-        filepath=cfg.CHECKPOINT_PATH, 
-        verbose=0, 
-        save_weights_only=True,
-        save_freq=5
-    )
-
+    # init transformer model
     model = Transformer(
         num_hid=200,
         num_head=2,
@@ -130,10 +127,14 @@ def train():
         num_layers_dec=1,
         num_classes=108,
     )
+
+    # define loss matric. label_smoothing is important because 
+    # class distribution is not equal
     loss_fn = tf.keras.losses.CategoricalCrossentropy(
         from_logits=True, label_smoothing=0.1,
     )
 
+    # learning reate scheduler
     learning_rate = CustomSchedule(
         init_lr=0.00001,
         lr_after_warmup=0.001,
@@ -142,9 +143,21 @@ def train():
         decay_epochs=85,
         steps_per_epoch=len(ds),
     )
+
+    # model checpoint saving callbacks
+    checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(
+        filepath=cfg.CHECKPOINT_PATH, 
+        verbose=0, 
+        save_weights_only=True,
+        save_freq=5
+    )
+    # set optimzer
     optimizer = keras.optimizers.Adam(learning_rate)
+
+    # compile the model
     model.compile(optimizer=optimizer, loss=loss_fn)
 
+    # start training the model
     model.fit(
     	ds,
     	validation_data=val_ds,

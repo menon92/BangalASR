@@ -2,7 +2,8 @@ import os
 from glob import glob
 from tqdm import tqdm
 
-
+# character we will filter from text sequence, this can be change accordint
+# to your needs
 FILTER_CHARS = [
     '"', '%', "'", ',', '-', '.', '/', '\x93', '\x94', '\u200c', '\u200d', '‘', 
     '’', '“', '”', '…', '!', ':'
@@ -32,7 +33,15 @@ def convert_flac_to_wav(flac_audio_files):
 
 
 def get_data(utt_path, flac_audio_dir, show_summary=True):
-    '''Get data from utt, flac audio dir
+    '''Get data summary from utt, flac audio dir
+    
+    Args:
+        utt_path: str, path to utt csv file
+        flac_audio_dir: str, path to flac audio dir
+        show_summary: bool, whether to show summary or not
+    
+    Returns:
+        Tuple: data, unique_chars
     '''
     flac_audio_files = glob(flac_audio_dir + '/*/*.flac')
 

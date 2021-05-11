@@ -6,6 +6,7 @@ from tensorflow.keras import layers
 
 
 class TokenEmbedding(layers.Layer):
+    '''Positinal embedding layer define for ASR'''
     def __init__(self, num_vocab=1000, maxlen=100, num_hid=64):
         super().__init__()
         self.emb = tf.keras.layers.Embedding(num_vocab, num_hid)
@@ -20,6 +21,7 @@ class TokenEmbedding(layers.Layer):
 
 
 class SpeechFeatureEmbedding(layers.Layer):
+    '''Extract visual speech feature from spectogram of audio'''
     def __init__(self, num_hid=64, maxlen=100):
         super().__init__()
         self.conv1 = tf.keras.layers.Conv1D(
@@ -74,6 +76,7 @@ class SpeechFeatureEmbedding(layers.Layer):
 
 
 class TransformerEncoder(layers.Layer):
+    '''Encode the speech information'''
     def __init__(self, embed_dim, num_heads, feed_forward_dim, rate=0.1):
         super().__init__()
         self.att = layers.MultiHeadAttention(num_heads=num_heads, key_dim=embed_dim)
@@ -98,6 +101,7 @@ class TransformerEncoder(layers.Layer):
 
 
 class TransformerDecoder(layers.Layer):
+    '''Decode the speech information'''
     def __init__(self, embed_dim, num_heads, feed_forward_dim, dropout_rate=0.1):
         super().__init__()
         self.layernorm1 = layers.LayerNormalization(epsilon=1e-6)
@@ -148,6 +152,7 @@ class TransformerDecoder(layers.Layer):
 
 
 class Transformer(keras.Model):
+    '''Transform model for speech recognition'''
     def __init__(
         self,
         num_hid=64,
@@ -212,40 +217,67 @@ class Transformer(keras.Model):
         target = batch["target"]
         dec_input = target[:, :-1]
         dec_target = target[:, 1:]
+
         with tf.GradientTape() as tape:
+            # take prediciton from the model
             preds = self([source, dec_input])
+
+            # create one-hot and mask to computer loss
             one_hot = tf.one_hot(dec_target, depth=self.num_classes)
             mask = tf.math.logical_not(tf.math.equal(dec_target, 0))
+
+            # calculate loss on training data
             loss = self.compiled_loss(one_hot, preds, sample_weight=mask)
+        # take the all trainable variable the modle
         trainable_vars = self.trainable_variables
+        # calculate gradient accordint to loss and trainable variable
         gradients = tape.gradient(loss, trainable_vars)
+        
+        # update trainable variable accordint to gradient calcualted
         self.optimizer.apply_gradients(zip(gradients, trainable_vars))
+        # update loss matric
         self.loss_metric.update_state(loss)
+
         return {"loss": self.loss_metric.result()}
 
     def test_step(self, batch):
+        '''Test step perform after each batch finished'''
         source = batch["source"]
         target = batch["target"]
         dec_input = target[:, :-1]
         dec_target = target[:, 1:]
+
+        # take predictioin from the model
         preds = self([source, dec_input])
+
+        # create one-hot and mask to computer loss
         one_hot = tf.one_hot(dec_target, depth=self.num_classes)
         mask = tf.math.logical_not(tf.math.equal(dec_target, 0))
+
+        # computer loss on test sample
         loss = self.compiled_loss(one_hot, preds, sample_weight=mask)
+        # update loss metric
         self.loss_metric.update_state(loss)
+
         return {"loss": self.loss_metric.result()}
 
     def generate(self, source, target_start_token_idx):
         """Performs inference over one batch of inputs using greedy decoding."""
         bs = tf.shape(source)[0]
+        # enocde source audio by encoder block
         enc = self.encoder(source)
+        # init a decode input
         dec_input = tf.ones((bs, 1), dtype=tf.int32) * target_start_token_idx
         dec_logits = []
         for i in range(self.target_maxlen - 1):
+            # take decoded output
             dec_out = self.decode(enc, dec_input)
+            # take logits usnig decoded output
             logits = self.classifier(dec_out)
+            # take lable which as heights confidence score
             logits = tf.argmax(logits, axis=-1, output_type=tf.int32)
             last_logit = tf.expand_dims(logits[:, -1], axis=-1)
             dec_logits.append(last_logit)
             dec_input = tf.concat([dec_input, last_logit], axis=-1)
+
         return dec_input
