@@ -10,6 +10,12 @@ from . utils import VectorizeChar
 from . import dataset
 from . import config as cfg
 
+
+# Set seed for experiment reproducibility
+seed = 777
+tf.random.set_seed(seed)
+
+
 class DisplayOutputs(keras.callbacks.Callback):
     '''Display model outut after each specefied epochs'''
     def __init__(
