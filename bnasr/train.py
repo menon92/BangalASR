@@ -102,7 +102,7 @@ def train():
     )
 
     max_target_len = 200  # all transcripts in out data are < 200 characters
-    vectorizer = VectorizeChar(max_target_len)
+    vectorizer = VectorizeChar(unique_chars, max_target_len)
     print("vocab size", len(vectorizer.get_vocabulary()))
     
     # split data into train validation
