@@ -14,7 +14,7 @@ VALID_BATCH_SIZE = 4
 # 99% training and 1% validation
 TRAINING_DATA_PERCENTAGES = 0.99
 MODEL_SAVE_DIR = 'models/experiments'
-CHECKPOINT_PATH = os.path.join(MODEL_SAVE_DIR, 'bnasr-{epoch:02d}-{val_loss:.4f}')
+CHECKPOINT_PATH = os.path.join(MODEL_SAVE_DIR, 'bnasr-{epoch:02d}-{loss:.4f}') #val_loss -> loss 
 
 # resume trained model or not
 RESUME_TRAINING = False
