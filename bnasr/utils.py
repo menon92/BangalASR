@@ -108,7 +108,7 @@ def create_audio_ds(data):
     return audio_ds
 
 
-def create_tf_dataset(data, bs=4):
+def create_tf_dataset(data, vectorizer, bs=4):
     '''Create tensorflow compitable data, so that we can directly feed it
     into our asr pipeline
     
@@ -120,7 +120,7 @@ def create_tf_dataset(data, bs=4):
         Tensorflwo Dataset object
     '''
     audio_ds = create_audio_ds(data)
-    text_ds = create_text_ds(data)
+    text_ds = create_text_ds(data, vectorizer)
 
     ds = tf.data.Dataset.zip((audio_ds, text_ds))
     ds = ds.map(lambda x, y: {"source": x, "target": y})

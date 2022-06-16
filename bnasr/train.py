@@ -111,8 +111,8 @@ def train():
     train_data = data # data[:split]
     test_data = data[split:]
     
-    ds = utils.create_tf_dataset(train_data, bs=cfg.TRAIN_BATCH_SIZE)
-    val_ds = utils.create_tf_dataset(test_data, bs=cfg.VALID_BATCH_SIZE)
+    ds = utils.create_tf_dataset(train_data, vectorizer, bs=cfg.TRAIN_BATCH_SIZE)
+    val_ds = utils.create_tf_dataset(test_data, vectorizer, bs=cfg.VALID_BATCH_SIZE)
     
     # take test sample
     batch = next(iter(val_ds))
@@ -131,7 +131,7 @@ def train():
         target_maxlen=max_target_len,
         num_layers_enc=4,
         num_layers_dec=1,
-        num_classes=108,
+        num_classes=len(vectorizer.get_vocabulary()), #108 -> number of vocab in vectorizer
     )
 
     # define loss matric. label_smoothing is important because 
