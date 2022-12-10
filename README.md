@@ -47,7 +47,6 @@ BangalASR/
 └── tests             # test scripts
     └── test_dataset.py
 ```
-For training run `python -m bnasr.train`
 
 ## Inferance
 For inferance please check [Inferance script](./notebooks/asr_inferance.ipynb)
