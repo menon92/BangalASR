@@ -115,19 +115,19 @@ for i, d in df.iterrows():
     print(f"Sample [ {i+1} ] target text: {text}")
     print(f"Target audio: {audio}")
     ipd.display(ipd.Audio(audio))
-    
+
     target_audio = utils.path_to_audio(audio)
     target_audio = tf.expand_dims(target_audio, 0)
     # perform prediction on given target audio file
     preds = predict(target_audio, target_start_token_idx, target_maxlen=max_target_len)
-    
+
     preds = preds.numpy()[0]
     prediction = []
     for idx in preds:
         prediction.append(idx_to_char[idx])
         if idx == target_end_token_idx:
             break
-    
+
     prediction = ''.join(prediction)
     print(f"prediction: {prediction}")
     print('-'*50)
@@ -170,6 +170,15 @@ Target audio: ../data/test-samples/test_wav/07738a801d.wav
 prediction: <চাঁদনী রাতের ভালোবাসার ফটো>
 --------------------------------------------------
 ```
+
+## Training
+
+If you want to regenerate the training you can use [this kaggle notebook](https://www.kaggle.com/code/menonbrur/bangla-asr-transformer)
+After epoch 140 you should get output like this
+
+![train-logs](./images/training-logs.png)
+
+This training is done on very small amount (~ 5 hr) of data and validation is done on the 1% data taken from the training dataset
 
 ## Referance
 - [The Illustrated Transformer](http://jalammar.github.io/illustrated-transformer/)
