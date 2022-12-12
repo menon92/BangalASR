@@ -177,6 +177,16 @@ After epoch 140 you should get output like this. This training is done on very s
 
 ![train-logs](./images/training-logs.png)
 
+## Citation
+```
+@misc{banglatext2image,
+  title={Bnagla synthetic text image generation},
+  author={Mehadi Hasan Menon},
+  howpublished={https://github.com/menon92/BanglaText2Image},
+  year={2020}
+}
+```
+
 ## Referance
 - [The Illustrated Transformer](http://jalammar.github.io/illustrated-transformer/)
 - [Attention is All You Need](https://papers.nips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
