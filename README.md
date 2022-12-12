@@ -179,10 +179,10 @@ After epoch 140 you should get output like this. This training is done on very s
 
 ## Citation
 ```
-@misc{banglatext2image,
-  title={Bnagla synthetic text image generation},
+@misc{BanglaASR,
+  title={Bangla Transformer Based ASR},
   author={Mehadi Hasan Menon},
-  howpublished={https://github.com/menon92/BanglaText2Image},
+  howpublished={https://github.com/menon92/BangalASR},
   year={2020}
 }
 ```
