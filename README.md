@@ -173,7 +173,9 @@ prediction: <চাঁদনী রাতের ভালোবাসার ফ�
 ## Training
 
 If you want to regenerate the training you can use [this kaggle notebook](https://www.kaggle.com/code/menonbrur/bangla-asr-transformer)
-After epoch 140 you should get output like this. This training is done on very small amount (~ 5 hr) of data and validation is done on the 1% data taken from the training dataset
+After epoch 140 you should get output like this. This training is done on very small amount (~ 5 hr) of data and validation is done on the 1% data taken from the training dataset. 
+
+The model included in this repository was train on 3K audio samples with 550 epoch. The best loss was 0.54. You can check the name of model checkpoint 
 
 ![train-logs](./images/training-logs.png)
 
