@@ -3,6 +3,16 @@
 
 __Quick demo:__ [Video link](https://www.youtube.com/watch?v=s9nGrG5cF5M&list=PL4wQs28gofOGVZfH0jG0U7dMB-fzA69ph)
 
+# Contents
+1. [Dataset](#dataset)
+2. [Dependency](#dependency)
+3. [Project structure](#project-structure)
+4. [How to make inferance](#inferance)
+5. [Training with new data](#training)
+6. [Citation](#citation)
+7. [Referance](#referance)
+
+
 ## Dataset
 [Bengali ASR training dataset](http://openslr.org/53/) containing `~196K utterances`. I did not training with all the sample instead I take a portion of sample from this dataset. You will find the samall dataset under `data/`
 
